@@ -8,7 +8,7 @@
     {% else %}
         dir="ltr" lang="{{ LANGUAGE_CODE }}""
     {% endif %}
-    class="{% block bgcolor %}bg-blue-50{% endblock %}">
+    class="">
 
     <head>
         {% block head %}{% endblock %}
@@ -21,44 +21,39 @@
         <!--<link rel="stylesheet" href="{% static 'fonts.css' %}">-->
         <title>{% block title %}Uplearn{% endblock %}</title>
     </head>
-    <body>
-        <header class="bg-gray-900 text-gray-100 px-10 py-3 flex justify-between items-center">
+    <body 
+        style="{% block bgstyle %}{% endblock %}"
+        class="flex flex-col min-h-screen {% block bgcolor %}bg-blue-50{% endblock %}">
+        <header class="bg-gray-900/80 backdrop-blur-sm text-gray-100 px-10 py-2.5 flex justify-between items-center">
             <div class="flex items-center" >
                 <a class="font-bold text-2xl" href="{% url 'index' %}">
-                    UpLearn
+                    <span class="text-orange-600">Up</span>
+                    <span>Learn</span>
                 </a>
-                <div class="hidden mx-4 lg:flex flex-row">
-                    <div class="mx-3">
-                        <a class="text-[15px] text-gray-200" href="#">{% trans 'Getting Started' %}</a>
-                    </div>
-                    <div class="mx-3">
-                        <a class="text-[15px] text-gray-200" href="#">{% trans 'Roadmaps' %}</a>
-                    </div>
-                    <div class="mx-3">
-                        <a class="text-[15px] text-gray-200" href="#">{% trans 'Donate' %}</a>
-                    </div>
-                    <div class="mx-3">
-                        <a class="text-[15px] text-gray-200" href="#">{% trans 'About us' %}</a>
-                    </div>
-                    <div class="mx-3">
-                        <a class="text-[15px] text-gray-200" href="#">{% trans 'FAQ' %}</a>
-                    </div>
-                </div>
+                <form class="hidden xl:block mx-5 border-2 border-solid border-gray-500 hover:bg-black/30 rounded-lg overflow-hidden">
+                    <i class="mx-4 fas fa-search"></i>
+                    <input class="p-1.5 w-80 bg-transparent focus:outline-none" placeholder="{% trans 'Search for articles and tutorials' %}" />
+                </form>
             </div>
             <div class="flex items-center">
-                <form class="hidden xl:block mx-5 border-2 border-solid border-gray-700 rounded-lg overflow-hidden">
-                    <i class="mx-4 fas fa-search"></i>
-                    <input class="p-2 w-80 bg-gray-900 focus:outline-none" placeholder="{% trans 'Search for articles and tutorials' %}" />
-                </form>
-                <i class="mx-3 fas fa-user"></i>
-                <div class="block lg:hidden">
-                    <i class="mx-4 text-xl fas fa-bars"></i>
-                </div>
+                <i onclick="hello()" class="mx-3 cursor-pointer hover:text-orange-600 fas fa-sun"></i>
+                <i class="mx-3 cursor-pointer hover:text-orange-600 fas fa-globe"></i>
+                <a href="{% url 'login' %}"
+                class="md:bg-black/20 hover:text-orange-600 md:hover:bg-black/30 md:pe-3 md:py-2 md:flex md:items-center cursor-pointer">
+                    <i class="mx-3 fas fa-user"></i>
+                    {% if user.is_authenticated %}
+                    <p class="hidden md:block">{{user.user_name}}</p>
+                    {% else %}
+                    <p class="hidden md:block">{% trans "login" %}</p>
+                    {% endif %}
+                </a>
             </div>
         </header>
-        {% block body %}
-        {% endblock %}
-        <footer class="py-2 bg-gray-900 text-center text-gray-300">
+        <main class="min-h-full">
+            {% block body %}
+            {% endblock %}
+        </main>
+        <footer class="mt-auto py-2 bg-gray-900 text-center text-gray-300">
             <!-- Copyright -->
             <p>
                 <span class="text-sm">{% trans "copyright" %}</span>
@@ -66,6 +61,10 @@
                 <span class="text-sm">2025</span>
             </p>
         </footer>
+        <script>
+            function hello() {
+                console.log('hello')
+            }
+        </script>
     </body>
-
 </html>
