@@ -11,7 +11,7 @@ class UserConfig(UserAdmin):
     list_display = ('email', 'user_name', 'is_active', 'is_staff')
 
     fieldsets = (
-        (None, {'fields': ('email', 'user_name', 'phone_number',)}),
+        (None, {'fields': ('email', 'user_name', 'first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_active')}),
     )
     # This is used for creating a new user in admin

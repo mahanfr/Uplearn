@@ -19,7 +19,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email', 'user_name', 'first_name', 'last_name']
+        fields = ['user_name', 'email', 'first_name', 'last_name']
     
     email = forms.EmailField(
         required=True,
@@ -53,22 +53,22 @@ class UserRegisterForm(forms.ModelForm):
             )
         return password2
     
-    def clean_email(self):
-        email = self.cleaned_data["email"].lower()
-        validate_email(email)
-        if User.objects.filter(email=email).count > 0:
-            raise forms.ValidationError(
-                self.error_messages["email_in_use"],
-                code= "email_in_use"
-            )
-        return email
-
     def clean_user_name(self):
         user_name = self.cleaned_data["user_name"]
         validate_username(user_name)
         if User.objects.filter(user_name=user_name).count() > 0:
             raise forms.ValidationError(self.error_messages["user_name_in_use"], code="user_name_in_use")
         return user_name
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].lower()
+        validate_email(email)
+        if User.objects.filter(email=email).count() > 0:
+            raise forms.ValidationError(
+                self.error_messages["email_in_use"],
+                code= "email_in_use"
+            )
+        return email
 
     def _post_clean(self):
         super()._post_clean()

@@ -6,7 +6,7 @@
     {% if LANGUAGE_CODE == 'fa' %}
         dir="rtl" lang="fa"
     {% else %}
-        dir="ltr" lang="{{ LANGUAGE_CODE }}""
+        dir="ltr" lang="{{ LANGUAGE_CODE }}"
     {% endif %}
     class="">
 
@@ -31,22 +31,44 @@
                     <span>Learn</span>
                 </a>
                 <form class="hidden xl:block mx-5 border-2 border-solid border-gray-500 hover:bg-black/30 rounded-lg overflow-hidden">
+                    {% csrf_token %}
                     <i class="mx-4 fas fa-search"></i>
                     <input class="p-1.5 w-80 bg-transparent focus:outline-none" placeholder="{% trans 'Search for articles and tutorials' %}" />
                 </form>
             </div>
-            <div class="flex items-center">
-                <i onclick="hello()" class="mx-3 cursor-pointer hover:text-orange-600 fas fa-sun"></i>
-                <i class="mx-3 cursor-pointer hover:text-orange-600 fas fa-globe"></i>
-                <a href="{% url 'login' %}"
-                class="md:bg-black/20 hover:text-orange-600 md:hover:bg-black/30 md:pe-3 md:py-2 md:flex md:items-center cursor-pointer">
-                    <i class="mx-3 fas fa-user"></i>
-                    {% if user.is_authenticated %}
-                    <p class="hidden md:block">{{user.user_name}}</p>
-                    {% else %}
-                    <p class="hidden md:block">{% trans "login" %}</p>
-                    {% endif %}
-                </a>
+            <div class="flex items-center gap-3">
+                <form action="{% url 'set_language' %}" method="post" id="language-select" class="cursor-pointer hover:text-orange-600">
+                    <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}" />
+                    <input name="language" type="hidden"
+                        {% if LANGUAGE_CODE == "fa" %}
+                        value="en"
+                        {% else %}
+                        value="fa"
+                        {% endif %}
+                     />
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center " >
+                        <i class="fas fa-globe"></i>
+                        <span class="hidden md:block mx-2">{{ LANGUAGE_CODE }}</span>
+                    </button>
+                </form>
+                <div class="relative">
+                    <button onclick="toggle_hdr_dropdown()" class="dropdown-toggle md:bg-black/20 hover:text-orange-600 md:hover:bg-black/30 md:pe-3 md:py-2 md:flex md:items-center cursor-pointer">
+                        <i class="mx-3 fas fa-user"></i>
+                        {% if user.is_authenticated %}
+                        <p class="hidden md:block">{{user.user_name}}</p>
+                        {% else %}
+                        <p class="hidden md:block">{% trans "login" %}</p>
+                        {% endif %}
+                    </button>
+                    <div id="hdr-dropdown-menu" class="hidden absolute bg-gray-900/80 backdrop-blur-md rounded-md text-white py-2 w-48 top-9 end-0">
+                        <a href="#" class="block px-6 py-2 hover:bg-sky-800">Dashboard</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-sky-800">Profile</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-sky-800">Theme: Light</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-sky-800">Settings</a>
+                        <a href="#" class="block px-6 py-2 hover:bg-sky-800">Logout</a>
+                    </div>
+                </div>
             </div>
         </header>
         <main class="min-h-full">
@@ -62,9 +84,16 @@
             </p>
         </footer>
         <script>
-            function hello() {
-                console.log('hello')
+            function toggle_hdr_dropdown() {
+                var dropdownMenu = document.getElementById("hdr-dropdown-menu")
+                if (dropdownMenu.classList.contains("hidden")) {
+                    dropdownMenu.classList.remove("hidden")
+                } else {
+                    dropdownMenu.classList.add("hidden")
+                }
             }
+            {% block script %}
+            {% endblock %}
         </script>
     </body>
 </html>

@@ -4,7 +4,6 @@ from django.contrib.auth.models import BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-
 # This is a class for managing our custom user authentication
 class CustomUserManager(BaseUserManager):
     def create_superuser(self, email, user_name, password,
@@ -51,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['user_name']
-
+    
 
 # Addition to user model for more inforamtion about user
 class Profile(models.Model):
